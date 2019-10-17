@@ -7,7 +7,6 @@ def dfs(matrix,x_start,y_start,x_end,y_end):
 		path.append(current)
 		x,y=current
 		if(x==x_end and y==y_end):
-			print(1)
 			break
 		matrix[y][x]=1
 		if(matrix[y][x-1]!=0 and matrix[y-1][x]!=0 and matrix[y+1][x]!=0 and matrix[y][x+1]!=0):
