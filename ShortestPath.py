@@ -10,6 +10,9 @@ def read_file(path):
       width, height = [int(x) for x in lines[0].split()]
       start_x, start_y, end_x, end_y = [int(x) for x in lines[1].split()]
     
+      # Get number of polygons
+      number_of_polygons = int(lines[2])
+    
       # Get polygons
       length = len(lines)
       polygons = [[int(x) for x in lines[i].split()] for i in range(3, length)]
@@ -55,14 +58,14 @@ class Graph2D :
     self.coordinate = [ [ 0 for x in range(0,width)] for y in range(0,height)]
     self.direct = [ [0,-1],[0,1],[-1,0],[1,0]]
 
-  def set_state(self,point) :
+  def setState(self,point) :
     x,y = point
     self.coordinate[y][x] = 1 - self.coordinate[y][x]
 
-  def get_state(self,x,y) :
+  def getState(self,x,y) :
     return self.coordinate[y][x] 
 
-  def out_of_bounds(self,x,y) :
+  def outOfBounds(self,x,y) :
     return not (0< x and x < self.width and 0 < y and y < self.height)
   
   def points_to_polygon(self,points):
@@ -77,20 +80,20 @@ class Graph2D :
 			
       # if there is a x-axis line
       if(x1 == x2):
-        for y in range(min([y1,y2]),max([y1,y2])+1):
-          polygon.append((x1,y))
+				for y in range(min([y1,y2]),max([y1,y2])+1):
+					polygon.append((x1,y))
       else:
         a=(y2-y1)/(x2-x1)
         b=(int)(y1-x1*a)
         for x in range(min([x1,x2]),max([x1,x2])+1):
-          polygon.append((x,int(x*a+b)))
+				  polygon.append((x,int(x*a+b)))
 
     return polygon
 
   def points_to_polygons(self,points):
     polygons = []
     for p in points:
-      polygons.append(self.points_to_polygon(p))
+			polygons.append(self.points_to_polygon(p))
     return polygons
 
   def polygons_to_coordinate(self,polygons):
@@ -105,16 +108,12 @@ class Graph2D :
     neighbors = []
     for i in range(0,4) :
       x,y = self.direct[i][0]+current[0], self.direct[i][1]+current[1]
-      if( not self.out_of_bounds(x,y) and self.get_state(x,y)!=1 ):
+      if( not self.outOfBounds(x,y) and self.getState(x,y)!=1 ):
         neighbors.append((x,y))
     return neighbors
 
   def printGraph(self) : 
-<<<<<<< HEAD
     print(self.coordinate)
-=======
-    print (self.coordinate)
->>>>>>> 398dc8b72eaa2e24f82f0bd9063d8ed29346e44a
 
 #######################################
 class ShortestPath : 
@@ -122,11 +121,9 @@ class ShortestPath :
     self.graph2D = graph2D
 
   def backtrace(self,parent,start,end) :
-    if not parent[end]:
-      return None
     path = [end]
     while path[-1] != start:
-      path.append(parent[path[-1]])
+        path.append(parent[path[-1]])
     path.reverse()
     return path
   
@@ -170,53 +167,32 @@ class ShortestPath :
           #Update frontier and parent
           frontier.put(next, priority)
           parent[next] = current
+    if(parent[end] == None):
+      return -1
     return self.backtrace(parent, start, goal)
 
-  # BFS
   def BFS(self,start,end) :
-<<<<<<< HEAD
     xa,ya = start
     xb,yb = end
     
-=======
->>>>>>> 398dc8b72eaa2e24f82f0bd9063d8ed29346e44a
     queue = deque([])
     queue.append([start,0])
     parent = {}
-    parent[start] = None
-    parent[end] = None
     graph2D = self.graph2D
 
-    graph2D.set_state(start)
+    graph2D.setState(start)
 
     while queue : 
       current,cost = queue.popleft()
-<<<<<<< HEAD
       print(current)
-=======
->>>>>>> 398dc8b72eaa2e24f82f0bd9063d8ed29346e44a
       if(current == end): 
-        break
+        return self.backtrace(parent,start,end)
      
       for next in self.graph2D.get_neighbors(current):
-        graph2D.set_state(next)
+        graph2D.setState(next)
         queue.append([next,cost+1])
         parent[next] = (current)
-    return self.backtrace(parent,start,end)
-
-  #DFS
-  def DFS(self,start,end):
-    path=[]
-    queue=[start]
-    while (queue):
-      current=queue.pop(0)
-      path.append(current)
-      if(current == end):
-        break
-      self.graph2D.set_state(current)
-      for next in self.graph2D.get_neighbors(current):
-        queue.insert(0,next)
-    return path
+    return -1
 
 #######################################
 width,height, start, end, polygons = read_file("/home/truongtop14/git_workspace/AI-Searching-Algorithm-Project/TestCase/input_0.txt")
@@ -226,15 +202,9 @@ graph2D.polygons_to_coordinate(polygons)
 
 shortestPath = ShortestPath(graph2D)
 
-<<<<<<< HEAD
 path =  shortestPath.a_star_search( start,end )
 if(path != -1) :
   print(len(path) - 1)
-=======
-path =  shortestPath.DFS( start,end )
-if(path) :
-  print(len(path)-1)
->>>>>>> 398dc8b72eaa2e24f82f0bd9063d8ed29346e44a
   print(path)
 else :
   print("No solution")
