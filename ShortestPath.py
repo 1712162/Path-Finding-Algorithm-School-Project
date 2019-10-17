@@ -113,7 +113,7 @@ class Graph2D :
     return neighbors
 
   def printGraph(self) : 
-    print self.coordinate
+    print(self.coordinate)
 
 #######################################
 class ShortestPath : 
@@ -170,10 +170,8 @@ class ShortestPath :
     if(parent[end] == None):
       return -1
     return self.backtrace(parent, start, goal)
-  # BFS
 
   def BFS(self,start,end) :
-
     xa,ya = start
     xb,yb = end
     
@@ -186,7 +184,7 @@ class ShortestPath :
 
     while queue : 
       current,cost = queue.popleft()
-      print current
+      print(current)
       if(current == end): 
         return self.backtrace(parent,start,end)
      
@@ -197,7 +195,7 @@ class ShortestPath :
     return -1
 
 #######################################
-width,height,start,end,polygons = read_file("/home/voquocthang/Python/test.txt")
+width,height, start, end, polygons = read_file("/home/truongtop14/git_workspace/AI-Searching-Algorithm-Project/TestCase/input_0.txt")
 
 graph2D = Graph2D(width+1,height+1)
 graph2D.polygons_to_coordinate(polygons)
@@ -206,10 +204,10 @@ shortestPath = ShortestPath(graph2D)
 
 path =  shortestPath.a_star_search( start,end )
 if(path != -1) :
-  print len(path)-1
-  print path
+  print(len(path) - 1)
+  print(path)
 else :
-  print "No solution"
+  print("No solution")
 
         
 
