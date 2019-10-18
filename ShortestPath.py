@@ -125,6 +125,72 @@ class Graph2D :
         neighbors.append((x,y))
     return neighbors
 
+def polygon_limit(self,polygon,orientation):
+    xy_of_polygon=[]
+    for i in polygon:
+      x,y=i
+      if(orientation==1):
+        xy_of_polygon.append(x)
+      else:
+        xy_of_polygon.append(y)
+    min_xy_of_polygon=min(xy_of_polygon)
+    max_xy_of_polygon=max(xy_of_polygon)
+    return (min_xy_of_polygon,max_xy_of_polygon)
+
+  def polygon_move_limit(self,polygon):
+    coordinate=self.coordinate.copy()
+    min_x_of_polygon, max_x_of_polygon=self.polygon_limit(polygon,1)
+    min_y_of_polygon, max_y_of_polygon=self.polygon_limit(polygon,0)
+    y_limit_up=[self.height+1]
+    y_limit_down=[0]
+    for i in range(min_x_of_polygon,max_x_of_polygon+1):
+      for j in range(min_y_of_polygon-1,0,-1):
+        if(coordinate[j][i]!=0 and i!=0 and i!=self.width):
+          y_limit_up.append(j)
+          break
+      for j in range(1,max_y_of_polygon+1,self.height+1):
+        if(coordinate[j][i]!=0 and i!=0 and i!=self.width):
+          y_limit_down.append(j)
+          break
+    return (max(y_limit_up),min(y_limit_down))
+  
+  def polygon_can_move(self,polygon,up_down):
+    min_y_limit,max_y_limit=self.polygon_move_limit(polygon)
+    min_y_of_polygon,max_y_of_polygon=self.polygon_limit(polygon,0)
+    if(min_y_of_polygon+up_down<=min_y_limit or max_y_of_polygon+up_down>=max_y_limit):
+      return False
+    return True
+  
+  def move_one_polygon(self,polygon_index,up_down):
+    coordinate=self.coordinate
+    polygon=self.polygons.pop(polygon_index)
+    if((self.polygon_can_move(polygon,up_down))):
+      y_limit_up,y_limit_down=self.polygon_move_limit(polygon)
+      polygon_after_move=[]
+      for i in polygon:
+        x,y=i
+        coordinate[y][x]=0
+      for i in polygon:
+        x,y=i
+        polygon_after_move.append((x,y+up_down))
+        coordinate[y+up_down][x]=1
+      for i in range(0,self.height+1):
+        coordinate[i][0]=1
+        coordinate[i][self.width]=1
+      for i in range(0,self.width+1):
+        coordinate[0][i]=1
+        coordinate[self.height][i]=1
+      polygon=polygon_after_move
+    self.polygons.insert(polygon_index,polygon)
+    return coordinate
+
+  def move_all_polygons(self,up_down):
+    coordinate=[]
+    number_of_polygons=len(self.polygons)
+    for i in range(number_of_polygons):
+      coordinate=self.move_one_polygon(i,up_down)
+    return coordinate
+
 #######################################
 class ShortestPath : 
   def __init__(self,graph2D) :
@@ -144,7 +210,7 @@ class ShortestPath :
     (x2, y2) = b
     return abs(x1 - x2) + abs(y1 - y2)
 
-  def a_star_search(self, start, goal):
+  def a_star_search(self, start, goal, mode):
     #Push start into frontier
     frontier = PriorityQueue()
     frontier.put(start, 0)
@@ -160,13 +226,20 @@ class ShortestPath :
     cost_so_far[start] = 0
 
     while not frontier.empty():
+      #Exponent
+      t = 0
         # Get position from front positions (previous position)
       current = frontier.get()
-
+      
       # If you are standing at goal to stop
       if current == goal:
         break
 
+      #If mode=1 move coordinate
+      if mode == 1:
+        self.graph2D.move_all_polygons(((-1)**t)*2)
+        self.graph2D.set_state(current)
+        t = 1 - t
       # Get adjacent vertices
       for next in self.graph2D.get_neighbors(current):
         #Update new_cost 
