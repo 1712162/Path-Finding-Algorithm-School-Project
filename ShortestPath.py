@@ -2,9 +2,6 @@ from collections import deque
 import heapq
 import arcade
 import numpy as np
-from functools import reduce
-import operator
-import math
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Shortest path"
@@ -16,7 +13,16 @@ def read_file(path):
     
       # Convert line to attribute
       width, height = [int(x) for x in lines[0].split()]
-      start_x, start_y, end_x, end_y = [int(x) for x in lines[1].split()]
+     
+      # Start, End , Pick-up points
+      points = [int(x) for x in lines[1].split()]
+      length = len(points)
+      x = [points[i] for i in range(length) if i % 2 == 0]
+      y = [points[i] for i in range(length) if i % 2 == 1]
+    
+      start = (x[0], y[0])
+      end = (x[1], y[1])
+      pick_up_points = [(x[i], y[i]) for i in range(2, length//2)]
     
       # Get polygons
       length = len(lines)
@@ -36,7 +42,7 @@ def read_file(path):
             temp_polygon.append((x, y))
           
         new_polygons.append(temp_polygon)
-  return width, height, (start_x, start_y), (end_x, end_y),new_polygons
+  return width, height, start, end, new_polygons, pick_up_points
 ####################################################################
 # Create Priority Queue
 class PriorityQueue:
@@ -73,10 +79,7 @@ class Graph2D :
   def out_of_bounds(self,x,y) :
     return not (0< x and x < self.width and 0 < y and y < self.height)
   
-  def clockwise(self,coords):
-    center = tuple(map(operator.truediv, reduce(lambda x, y: map(operator.add, x, y), coords), [len(coords)] * 2))
-    return sorted(coords, key=lambda coord: (-135 - math.degrees(math.atan2(*tuple(map(operator.sub, coord, center))[::-1]))) % 360)
-
+ 
   def points_to_polygon(self,points):
     polygon = []
     number_of_points = len(points)
@@ -97,7 +100,7 @@ class Graph2D :
         for x in range(min([x1,x2]),max([x1,x2])+1):
           polygon.append((x,int(x*a+b)))
 
-    polygon = self.clockwise( list(set(polygon)) )
+    polygon = list(set(polygon)) 
     return polygon
 
   def points_to_polygons(self,points):
@@ -122,9 +125,6 @@ class Graph2D :
         neighbors.append((x,y))
     return neighbors
 
-  def printGraph(self) : 
-    print (self.coordinate)
-
 #######################################
 class ShortestPath : 
   def __init__(self,graph2D) :
@@ -132,7 +132,7 @@ class ShortestPath :
 
   def backtrace(self,parent,start,end) :
     if not parent[end]:
-      return None
+      return []
     path = [end]
     while path[-1] != start:
       path.append(parent[path[-1]])
@@ -217,6 +217,54 @@ class ShortestPath :
         queue.insert(0,next)
     return path
 
+  # Pick-up points 
+  def sort_by_distance(self,pick_up_points, start, end):
+    result = [start]
+    points = list(pick_up_points)
+  
+    while len(points) != 0:
+      # Init variables
+      point_min = points[0]
+      min_value = self.heuristic(result[-1], point_min)
+      
+      for point in points:
+        # Find point that has heuristic(result[-1], point) is minimum
+        if self.heuristic(result[-1], point) < min_value:
+          point_min = point
+          min_value = self.heuristic(result[-1], point)
+      
+      # Update point_list
+      result.append(point_min)
+      # Deleted Out of pick_up points
+      points.remove(point_min)
+      
+    # Add end point
+    result.append(end)
+    
+    return result
+
+  def shortest_path_with_pickup_points(self, start, end, pick_up_points):
+    point_list = self.sort_by_distance(pick_up_points, start, end)
+    result = []
+    
+    # Find first period
+    path = self.a_star_search(point_list[0], point_list[1])
+    if path != -1:
+      result = path
+    else:
+      return -1
+    
+    length = len(point_list)
+    for i in range(1, length - 1):
+      path =  self.a_star_search(point_list[i], point_list[i + 1])
+      
+      if path != -1:
+        for i in range(1, len(path)):
+          result.append(path[i])
+      else:
+        return -1
+      
+    return result
 
 #######################################
 class Graphic2D(arcade.Window):
@@ -236,28 +284,22 @@ class Graphic2D(arcade.Window):
       x,y = p
       cells.append([x*self.cell_width,y*self.cell_height])
     return cells
-  
 
-  def draw_polygon(self,polygon):
-    print(polygon)
-    color = tuple(np.random.choice(range(256), size=3))
-    arcade.draw_polygon_filled(self.points_to_cells(polygon),color)
   
-  def draw_path(self,path):
+  def draw_points(self,points,text = None):
     color = tuple(np.random.choice(range(256), size=3))
-    cells = self.points_to_cells(path)
+    cells = self.points_to_cells(points)
     for cell in cells :
       x,y = cell
-      arcade.draw_polygon_filled([[x,y],[x-self.cell_width+2,y],[x-self.cell_width+2,y-self.cell_height+2],[x,y-self.cell_height+2]],color)
-
-  def draw_start_end(self,start,end):
-    s,e = self.points_to_cells([start,end])
-    arcade.draw_text("S",s[0]-self.cell_width/2,s[1]-self.cell_height/2,arcade.color.BLACK,20)
-    arcade.draw_text("G",e[0]-self.cell_width/2,e[1]-self.cell_height/2,arcade.color.BLACK,20)
+      if(text): arcade.draw_text(text,x-self.cell_width/2,y-self.cell_height,arcade.color.BLACK,20)
+      else : arcade.draw_polygon_filled([[x,y],[x-self.cell_width+2,y],[x-self.cell_width+2,y-self.cell_height+2],[x,y-self.cell_height+2]],color)
 
 
+  def draw_text(self):
+    arcade.start_render()
+    arcade.draw_text("No solution",SCREEN_WIDTH/3,SCREEN_HEIGHT/2,arcade.color.BLACK,20)
 
-  def draw_output(self,start,end,polygons,path):
+  def draw_output(self,start,end,polygons,pick_up_points,path):
 
     arcade.start_render()
     for x in range(0, SCREEN_WIDTH, self.cell_width ):
@@ -265,31 +307,37 @@ class Graphic2D(arcade.Window):
     for y in range(0,SCREEN_HEIGHT, self.cell_height ):
       arcade.draw_line(0, y,SCREEN_WIDTH, y, arcade.color.BLACK, 2)
 
+    # Draw polygon
     for polygon in polygons:
-      self.draw_polygon(polygon)
+      self.draw_points(polygon)
+    
+    # Draw path
+    self.draw_points(path) 
 
-    self.draw_path(path) 
+    #Draw begin,end
+    self.draw_points([start],"S")
+    self.draw_points([end],"G")
 
-    self.draw_start_end(start,end)
+    #Draw pickup points
+    self.draw_points(pick_up_points,"P")
 
+    arcade.finish_render()
 
 
 #######################################
-width,height,start,end,polygons = read_file("/home/voquocthang/Python/test.txt")
+width,height,start,end,polygons,pick_up_points = read_file("/home/voquocthang/Python/test.txt")
 
 graph2D = Graph2D(width+1,height+1)
 graph2D.polygons_to_coordinate(polygons)
 
 shortestPath = ShortestPath(graph2D)
-path =  shortestPath.BFS( start,end )
-if(path) :
-  window = Graphic2D(width,height)
-  window.setup()
-  window.draw_output(start,end,graph2D.points_to_polygons(polygons),path)
-  arcade.run()
- 
-else :
-  print("No solution")
+path =  shortestPath.shortest_path_with_pickup_points(start,end,pick_up_points)
+
+window = Graphic2D(width,height)
+window.setup()
+window.draw_output(start,end,graph2D.points_to_polygons(polygons),pick_up_points,path)
+arcade.run()
+
 
         
 
