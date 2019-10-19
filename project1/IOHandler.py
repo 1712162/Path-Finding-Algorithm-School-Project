@@ -1,4 +1,3 @@
-import arcade
 from Graph2D import Graph2D
 from Switcher import Switcher
 from Graphic2D import Graphic2D
@@ -61,12 +60,11 @@ class IOHandler:
     self.graph2D = Graph2D(self.width+1,self.height+1)
     self.graph2D.polygons_to_coordinate(self.polygons)
 
-    switcher = Switcher(self.graph2D,self.start,self.end)
+    switcher = Switcher(self.graph2D,self.start,self.end,self.pick_up_points)
     result = switcher.execute(level)
     return result
 
   def handle_output(self,path): 
-    window = Graphic2D(self.width,self.height)
-    window.setup()
-    window.draw_output(self.start,self.end,self.graph2D.points_to_polygons(self.polygons),self.pick_up_points,path)
-    arcade.run()
+    window = Graphic2D()
+    window.setup(self.width,self.height,self.start,self.end,self.polygons,self.pick_up_points,path)
+    window.run()

@@ -9,13 +9,8 @@ def main():
       IO.handle_output(path)
     wait = input("Press to continue")
 
-   
-
-
 if __name__ == "__main__":
-  main()
-
-        
+  main()   
 
 # /home/voquocthang/Study/CSTTNT/project1/test.txt
 

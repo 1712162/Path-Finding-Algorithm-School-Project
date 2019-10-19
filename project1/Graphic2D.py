@@ -1,57 +1,64 @@
-import arcade
+import pygame
 import numpy as np
+from Text import Text
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Shortest path"
-class Graphic2D(arcade.Window):
+BACKGROUND_COLOR = (211,211,211)
+class Graphic2D():
    
-  def __init__(self,x_axis,y_axis):
-    super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    self.cell_width = int(SCREEN_WIDTH/x_axis)
-    self.cell_height = int(SCREEN_HEIGHT/y_axis)
-    arcade.set_background_color(arcade.color.WHITE)
-
-  def setup(self):
-    pass
-
-  def points_to_cells(self,points):
-    cells = []
-    for p in points:
-      x,y = p
-      cells.append([x*self.cell_width,y*self.cell_height])
-    return cells
-
+  def __init__(self):
+    pygame.init()
+    self.running = True
+    self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
   
-  def draw_points(self,points,text = None):
+  def setup(self,width,height,start,end,polygons,pick_up_points,path):
+    self.screen.fill(BACKGROUND_COLOR)
+    self.pixel_x = SCREEN_WIDTH/width
+    self.pixel_y = SCREEN_HEIGHT/height
+    self.draw_points([start,end],'S')
+    for polygon in polygons :
+      self.draw_polygon(polygon)
+    self.draw_points(pick_up_points,'P')
+    path.pop(0)
+    path.pop()
+    self.path = path
+
+  def run(self):
+    self.draw_path(self.path)
+    while self.running :
+      for event in pygame.event.get() :
+        if event.type == pygame.QUIT:
+          self.running = False
+    pygame.quit()
+
+  def transform_XY(self,coords):
+    points = []
+    for p in coords:
+      x,y = p
+      points.append((x*self.pixel_x,SCREEN_HEIGHT - y*self.pixel_y))
+    return points
+  
+  def draw_polygon(self,points):
     color = tuple(np.random.choice(range(256), size=3))
-    cells = self.points_to_cells(points)
-    for cell in cells :
-      x,y = cell
-      if(text): arcade.draw_text(text,x-self.cell_width/2,y-self.cell_height,arcade.color.BLACK,20)
-      else : arcade.draw_polygon_filled([[x,y],[x-self.cell_width+2,y],[x-self.cell_width+2,y-self.cell_height+2],[x,y-self.cell_height+2]],color)
-
-
-  def draw_text(self):
-    arcade.start_render()
-    arcade.draw_text("No solution",SCREEN_WIDTH/3,SCREEN_HEIGHT/2,arcade.color.BLACK,20)
-
-  def draw_output(self,start,end,polygons,pick_up_points,path):
-
-    arcade.start_render()
+    pygame.draw.polygon(self.screen,color,self.transform_XY(points))
+    pygame.display.update()
+  
+  def draw_points(self,points,text = None) :
+    color = tuple(np.random.choice(range(256), size=3))
+    points = self.transform_XY(points)
+    for point in points :
+      if(text) : Text(text,point).draw(self.screen)
+      pygame.draw.line(self.screen,color,point,point)
+      pygame.display.update()
    
-    # Draw polygon
-    for polygon in polygons:
-      self.draw_points(polygon)
-    
-    # Draw path
-    self.draw_points(path) 
+  def draw_path(self,path):
+    color = tuple(np.random.choice(range(256), size=3))
+    path = self.transform_XY(path)
+    for point in path :
+      x,y = point
+      pygame.draw.rect(self.screen,color,(x,y,self.pixel_x,self.pixel_y))
+      pygame.display.update()
+      pygame.time.delay(1000)
 
-    #Draw begin,end
-    self.draw_points([start],"S")
-    self.draw_points([end],"G")
-
-    #Draw pickup points
-    self.draw_points(pick_up_points,"P")
-
-    arcade.finish_render()
+  #def draw_output(self,start,end,polygons,pick_up_points,path):
 
