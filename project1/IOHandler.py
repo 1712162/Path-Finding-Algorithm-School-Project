@@ -48,23 +48,29 @@ class IOHandler:
       level = i+1
       display_level = str(level)+'. level '+str(level)
       print(display_level)
+    print(str(number_of_levels+1)+'. Press 0 to exit')
   
   def handle_input(self):
+    result = None
     level = input('Level: ')
     print ('\n')
-    file_path = input("Enter your file path: ")
-    print('\n')
+    if int(level) < 5 and int(level) > 0 : 
+      file_path = input("Enter your file path: ")
+      print('\n')
 
-    self.width,self.height,self.start,self.end,self.polygons,self.pick_up_points = self.read_file(file_path)
+      self.width,self.height,self.start,self.end,self.polygons,self.pick_up_points = self.read_file(file_path)
 
-    self.graph2D = Graph2D(self.width+1,self.height+1)
-    self.graph2D.polygons_to_coordinate(self.polygons)
+      self.graph2D = Graph2D(self.width+1,self.height+1)
+      self.graph2D.polygons_to_coordinate(self.polygons)
 
-    switcher = Switcher(self.graph2D,self.start,self.end,self.pick_up_points)
-    result = switcher.execute(level)
+      switcher = Switcher(self.graph2D,self.start,self.end,self.pick_up_points)
+      result = switcher.execute(level)
+    else : 
+      if int(level) == 0 : 
+        result = 0
     return result
 
   def handle_output(self,path): 
     window = Graphic2D()
-    window.setup(self.width,self.height,self.start,self.end,self.polygons,self.pick_up_points,path)
+    window.setup(self.width,self.height,self.start,self.end,self.graph2D.points_to_polygons(self.polygons),self.pick_up_points,path)
     window.run()

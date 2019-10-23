@@ -1,5 +1,6 @@
 from collections import deque
 from PriorityQueue import PriorityQueue
+from Graphic2D import Graphic2D
 class ShortestPath : 
   def __init__(self,graph2D) :
     self.graph2D = graph2D
@@ -18,7 +19,8 @@ class ShortestPath :
     (x2, y2) = b
     return abs(x1 - x2) + abs(y1 - y2)
 
-  def a_star_search(self, start, goal):
+  def a_star_search(self, start, goal, mode):
+    self.graph2D.reset()
     #Push start into frontier
     frontier = PriorityQueue()
     frontier.put(start, 0)
@@ -53,10 +55,12 @@ class ShortestPath :
           #Update frontier and parent
           frontier.put(next, priority)
           parent[next] = current
+        
     return self.backtrace(parent, start, goal)
 
   # BFS
   def BFS(self,start,end) :
+    self.graph2D.reset()
     queue = deque([])
     queue.append(start)
     parent = {}
@@ -78,19 +82,66 @@ class ShortestPath :
     return self.backtrace(parent,start,end)
 
   #DFS
-  def DFS(self,start,end):
-    path=[]
+  def DFS(self,start,end,mode):
+    # if mode == 1:
+    #   window = Graphic2D()
+    # speed=1
+    # self.graph2D.reset()
+    # path=[]
+    # queue=[start]
+    # while (queue):
+    #   current=queue.pop(0)
+    #   if self.graph2D.is_in_polygons(current):
+    #     continue
+    #   path.append(current)
+    #   if(current == end):
+    #     break
+    #   x,y=current
+    #   self.graph2D.coordinate[y][x]=1
+    #   if mode==1:
+    #     self.graph2D.move_all_polygons(speed,current)
+    #     window.setup(self.graph2D.width,self.graph2D.height,start,end,self.graph2D.polygons,[],path)
+    #     window.draw_point(path[len(path)-1])
+    #   neighbors = self.graph2D.get_neighbors(current)
+    #   for next in neighbors:
+    #     queue.insert(0,next)
+    #   if( not neighbors ): path.pop(len(path)- 1)
+    #   speed=0-speed
+    # return path
+    if mode == 1:
+      window = Graphic2D()
+    speed = 1
+
+    path=[start]
     queue=[start]
     while (queue):
-      current=queue.pop(0)
-      path.append(current)
+      current=queue.pop(0)      
       if(current == end):
         break
-      self.graph2D.set_state(current)
-      neighbors = self.graph2D.get_neighbors(current)
-      for next in neighbors:
-        queue.insert(0,next)
-      if( not neighbors ): path.pop(len(path)- 1)
+      x,y = current
+      #If mode=1 move polygons in coordinate
+      if mode == 1:
+        self.graph2D.coordinate=self.graph2D.move_all_polygons(speed,current)
+        window.setup(self.graph2D.width,self.graph2D.height,start,end,self.graph2D.polygons,[],path)
+        window.draw_point(path)
+
+      neighbors=self.graph2D.get_neighbors(current)
+      if (len(neighbors)!=0):
+        if(self.graph2D.coordinate[y][x]!=1):
+         
+          path.append(current)
+          self.graph2D.coordinate[y][x]=1
+          for next in neighbors:
+            queue.insert(0,next)
+      else:
+        if len(path)>0:
+          queue.insert(0,path.pop(len(path)-1))
+
+      
+      
+      
+      speed=0-speed
+      
     return path
 
   # Pick-up points 

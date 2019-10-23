@@ -7,7 +7,7 @@ class Text:
     self.text = text
     self.pos = pos
     self.fontname = None
-    self.fontsize = 50
+    self.fontsize = 40
     self.fontcolor = Color('black')
     self.set_font()
     self.render()
@@ -21,7 +21,7 @@ class Text:
     background_color = tuple(np.random.choice(range(256), size=3))
     self.img = self.font.render(self.text,True, self.fontcolor,background_color)
     self.rect = self.img.get_rect()
-    self.rect.topleft = self.pos
+    self.rect.center = self.pos
 
   def draw(self,screen):
     screen.blit(self.img, self.rect)
