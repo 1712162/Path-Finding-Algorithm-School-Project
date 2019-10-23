@@ -435,7 +435,7 @@ class Function_switcher(object):
 
   def get_function(self,i):
 	  method_name='level_'+str(i)
-	  method=getattr(self,method_name,lambda :print('Invalid Function'))
+	  method=getattr(self, method_name, lambda : 'Invalid Function')
 	  return method()
 
   def draw_path(self,path):
