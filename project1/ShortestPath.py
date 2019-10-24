@@ -19,7 +19,7 @@ class ShortestPath :
     (x2, y2) = b
     return abs(x1 - x2) + abs(y1 - y2)
 
-  def a_star_search(self, start, goal, mode):
+  def a_star_search(self, start, goal):
     self.graph2D.reset()
     #Push start into frontier
     frontier = PriorityQueue()
@@ -56,7 +56,10 @@ class ShortestPath :
           frontier.put(next, priority)
           parent[next] = current
         
+
     return self.backtrace(parent, start, goal)
+
+  
 
   # BFS
   def BFS(self,start,end) :
@@ -83,31 +86,7 @@ class ShortestPath :
 
   #DFS
   def DFS(self,start,end,mode):
-    # if mode == 1:
-    #   window = Graphic2D()
-    # speed=1
-    # self.graph2D.reset()
-    # path=[]
-    # queue=[start]
-    # while (queue):
-    #   current=queue.pop(0)
-    #   if self.graph2D.is_in_polygons(current):
-    #     continue
-    #   path.append(current)
-    #   if(current == end):
-    #     break
-    #   x,y=current
-    #   self.graph2D.coordinate[y][x]=1
-    #   if mode==1:
-    #     self.graph2D.move_all_polygons(speed,current)
-    #     window.setup(self.graph2D.width,self.graph2D.height,start,end,self.graph2D.polygons,[],path)
-    #     window.draw_point(path[len(path)-1])
-    #   neighbors = self.graph2D.get_neighbors(current)
-    #   for next in neighbors:
-    #     queue.insert(0,next)
-    #   if( not neighbors ): path.pop(len(path)- 1)
-    #   speed=0-speed
-    # return path
+    self.graph2D.reset()
     if mode == 1:
       window = Graphic2D()
     speed = 1
@@ -123,7 +102,7 @@ class ShortestPath :
       if mode == 1:
         self.graph2D.coordinate=self.graph2D.move_all_polygons(speed,current)
         window.setup(self.graph2D.width,self.graph2D.height,start,end,self.graph2D.polygons,[],path)
-        window.draw_point(path)
+        window.draw_point([current])
 
       neighbors=self.graph2D.get_neighbors(current)
       if (len(neighbors)!=0):

@@ -48,7 +48,7 @@ class Graphic2D():
             (x-self.width/2,y+self.height/2)]
   
   def draw_polygon(self,points):
-    color = tuple(np.random.choice(range(256), size=3))
+    color = (0,0,0)
     points = self.convert(points)
     for point in points : 
       pygame.draw.polygon(self.screen,color,self.transform(point))
@@ -74,12 +74,11 @@ class Graphic2D():
   def draw_point(self,path):
     color = (255,255,255)
     path = self.convert(path)
-    path.pop(0)
     for point in path :
       x,y = point
       pygame.draw.circle(self.screen,color,(x,y),int(self.height/2))
       pygame.display.update()
-    pygame.time.delay(1000)  
+    pygame.time.delay(1000)
 
   #def draw_output(self,start,end,polygons,pick_up_points,path):
 

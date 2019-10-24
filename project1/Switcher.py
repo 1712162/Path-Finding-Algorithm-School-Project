@@ -14,12 +14,12 @@ class Switcher():
     return method()
   
   def level_1(self):
-    path = self.shortest_path.a_star_search(self.start,self.end,0)
+    path = self.shortest_path.a_star_search(self.start,self.end)
     return [path]
 
   def level_2(self):
     DFS = self.shortest_path.DFS(self.start,self.end,0)
-    AStart = self.shortest_path.a_star_search(self.start,self.end,0)
+    AStart = self.shortest_path.a_star_search(self.start,self.end)
     BFS = self.shortest_path.BFS(self.start,self.end)
     return AStart,BFS,DFS
     
