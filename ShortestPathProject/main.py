@@ -15,5 +15,3 @@ def main():
 if __name__ == "__main__":
   main()   
 
-# /home/voquocthang/Study/CSTTNT/ShortestPathProject/test.txt
-

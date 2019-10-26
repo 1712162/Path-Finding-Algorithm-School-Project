@@ -19,7 +19,9 @@ class Graphic2D():
   
   
   def setup(self,width,height,start,end,polygons,moving,pick_up_points,path,trace = None):
-    pygame.display.set_caption('CHI PHI DI CHUYEN NGAN NHAT: '+ str(len(path)-1))
+    caption = 'CHI PHI DI CHUYEN NGAN NHAT: '+ str(len(path)-1) if len(path)!=0 else 'No solution'
+    pygame.display.set_caption(caption)
+    
     self.screen.fill(BACKGROUND_COLOR)
     self.screen.set_alpha(255)
 
@@ -50,6 +52,7 @@ class Graphic2D():
     self.draw_text(self.pick_up_points,'P')
 
   def run(self):
+    self.draw()
     while self.running :
       if(self.trace) : 
         current = self.trace[0]

@@ -1,6 +1,9 @@
 from Graph2D import Graph2D
 from Switcher import Switcher
 from Graphic2D import Graphic2D
+
+DELIMETER = ","
+
 class IOHandler:
   def __init__(self):
     pass
@@ -11,10 +14,10 @@ class IOHandler:
       lines = [line for line in input_file]
     
       # Convert line to attribute
-      width, height = [int(x) for x in lines[0].split()]
+      width, height = [int(x) for x in lines[0].split(DELIMETER)]
     
       # Start, End , Pick-up points
-      points = [int(x) for x in lines[1].split()]
+      points = [int(x) for x in lines[1].split(DELIMETER)]
       length = len(points)
       x = [points[i] for i in range(length) if i % 2 == 0]
       y = [points[i] for i in range(length) if i % 2 == 1]
@@ -25,7 +28,7 @@ class IOHandler:
     
       # Get polygons
       length = len(lines)
-      polygons = [[int(x) for x in lines[i].split()] for i in range(3, length)]
+      polygons = [[int(x) for x in lines[i].split(DELIMETER)] for i in range(3, length)]
     
       # Convert type of polygons from list of list to list of list of tuple
       new_polygons = []
