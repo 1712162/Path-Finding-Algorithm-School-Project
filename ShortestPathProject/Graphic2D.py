@@ -32,8 +32,7 @@ class Graphic2D():
     self.pick_up_points = pick_up_points
     
   def draw(self) : 
-    if(self.moving): 
-      self.screen.fill(pygame.Color(255,255,255,0))
+    self.screen.fill(BACKGROUND_COLOR)
     for i in range(0,len(self.polygons)) :
       self.draw_polygon(self.polygons[i],self.polygons_color[i])
     self.draw_points(self.black_points,(0,0,0))
@@ -52,6 +51,7 @@ class Graphic2D():
         self.draw_points([current])
         self.black_points.append(current)
         self.path.pop(0)
+      pygame.display.update()
       pygame.time.delay(500)    
       for event in pygame.event.get() :
         if event.type == pygame.QUIT:
@@ -77,19 +77,16 @@ class Graphic2D():
     points = self.convert(points)
     for point in points : 
       pygame.draw.polygon(self.screen,color,self.transform(point))
-      pygame.display.update()
   
   def draw_text(self,points,text = None) :
     points = self.convert(points)
     for point in points :
       if(text) : Text(text,point).draw(self.screen)
-      pygame.display.update()
    
   def draw_points(self,points,color = (255,0,0)):
     points = self.convert(points)
     for point in points :
       x,y = point
       pygame.draw.circle(self.screen,color,(x,y),int(self.height/2))
-      pygame.display.update()
 
 
