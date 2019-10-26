@@ -53,10 +53,8 @@ class IOHandler:
   def handle_input(self):
     result = None
     level = input('Level: ')
-    print ('\n')
     if int(level) < 5 and int(level) > 0 : 
       file_path = input("Enter your file path: ")
-      print('\n')
 
       self.width,self.height,self.start,self.end,self.polygons,self.pick_up_points = self.read_file(file_path)
 
@@ -64,7 +62,7 @@ class IOHandler:
       self.graph2D.polygons_to_coordinate(self.polygons)
 
       switcher = Switcher(self.graph2D,self.start,self.end,self.pick_up_points)
-      result,self.history = switcher.execute(level)
+      result,self.history,self.trace = switcher.execute(level)
     else : 
       if int(level) == 0 : 
         result = 0
@@ -72,5 +70,5 @@ class IOHandler:
 
   def handle_output(self,path):
     window = Graphic2D()
-    window.setup(self.width,self.height,self.start,self.end,self.graph2D.points_to_polygons(self.polygons),self.history,self.pick_up_points,path)
+    window.setup(self.width,self.height,self.start,self.end,self.graph2D.points_to_polygons(self.polygons),self.history,self.pick_up_points,path,self.trace)
     window.run()

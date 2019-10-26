@@ -7,12 +7,13 @@ class Switcher():
     self.pick_up_points = pick_up_points
     self.shortest_path = ShortestPath(graph2D)
     self.history = None
+    self.trace = None
     self.graph2D = graph2D
 
   def execute(self,level):
     method_name = 'level_'+str(level)
     method = getattr(self,method_name)
-    return method(),self.history
+    return method(),self.history,self.trace
   
   def level_1(self):
     path = self.shortest_path.a_star_search(self.start,self.end)
@@ -29,6 +30,7 @@ class Switcher():
     return [path]
 
   def level_4(self) :
-    path = self.shortest_path.shortest_path_with_moving_polygons(self.start,self.end,self.pick_up_points)
+    path,trace = self.shortest_path.shortest_path_with_moving_polygons(self.start,self.end,self.pick_up_points)
     self.history = self.shortest_path.history
+    self.trace = trace
     return [path]

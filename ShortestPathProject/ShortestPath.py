@@ -156,7 +156,7 @@ class ShortestPath :
     cost_so_far[start] = 0
     trace = []
     self.history.append(self.graph2D.polygons)
-    
+
     while not frontier.empty():
       current = frontier.get()
 
@@ -179,4 +179,4 @@ class ShortestPath :
           priority = new_cost + self.heuristic(goal, next)
           frontier.put(next, priority)
           parent[next] = current
-    return trace
+    return self.backtrace(parent,start,goal),trace
