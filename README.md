@@ -2,9 +2,9 @@
 School project on implementing path finding algorithm in Python3 and Pygame 
 ## Table of contents:
 * [Problem](#problem)
-* [Path finding algorithm](#Pathfinding-algorithm)
+* [Path finding algorithm](#pathfinding-algorithm)
 * [Demo](#demo)
-* [Setup](#setup)
+* [How to use](#how-to-use)
 ## Problem 
 You are given a map in xOy coordinate system. On that map, there are two points and a number of polygons. Your job is to find the shortest path to move from one point to another point without bumping into any polygons. If it is impossible to find such path, print "No solution" ,otherwise you should print the path itself. 
 
@@ -35,4 +35,26 @@ Beside that, there are some levels to finish this problem:
 ![level 3](./image/level3.png)
 ### Level 4: Moving polygons 
 [![Watch the video](https://img.youtube.com/vi/48cSOiGZuwo/maxresdefault.jpg)](https://youtu.be/48cSOiGZuwo)
+## How to use 
+* Download python3.7
+* Install pygame 
+* Download src folder 
+* Run this on your commnad line
 
+```
+python3 main.py
+```
+
+There is a menu popping up on your ternminal: 
+
+```
+1. level 1
+2. level 2
+3. level 3
+4. level 4
+5. Press 0 to exit
+Level: (choose your level you want to execute)
+Enter your file path: (Enter the path where your input.txt located)
+````
+
+After a second,The result will show up on a popup windows
