@@ -9,6 +9,7 @@ School project on implementing searching algorithm in Python3 and Pygame
 You are given a map in xOy coordinate system. On that map, there are two points and a number of polygons. Your job is to find the shortest path to move from one point to another point without bumping into any polygons. If it is impossible to find such path, print "No solution" ,otherwise you should print the path itself. 
 
 Note that : polygons should not overlay with each other.
+![Problem image](./image/problem.png)
 
 Beside that, there are some levels to finish this problem: 
 * Level 1: Implementing only one searching algorithm
