@@ -2,7 +2,7 @@
 School project on implementing path finding algorithm in Python3 and Pygame 
 ## Table of contents:
 * [Problem](#problem)
-* [Path finding algorithm](#pathfinding-algorithm)
+* [Path finding algorithm](#path-finding-algorithm)
 * [Demo](#demo)
 * [How to use](#how-to-use)
 * [License](#license)
