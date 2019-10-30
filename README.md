@@ -5,6 +5,7 @@ School project on implementing path finding algorithm in Python3 and Pygame
 * [Path finding algorithm](#pathfinding-algorithm)
 * [Demo](#demo)
 * [How to use](#how-to-use)
+* [License](#license)
 ## Problem 
 You are given a map in xOy coordinate system. On that map, there are two points and a number of polygons. Your job is to find the shortest path to move from one point to another point without bumping into any polygons. If it is impossible to find such path, print "No solution" ,otherwise you should print the path itself. 
 
@@ -58,3 +59,9 @@ Enter your file path: (Enter the path where your input.txt located)
 ````
 
 After a second,The result will show up on a popup windows
+
+## License
+[License](https://github.com/iharsh234/WebApp/blob/master/LICENSE.md)
+
+MIT © [voquocthang](https://github.com/voquocthangit)
+
