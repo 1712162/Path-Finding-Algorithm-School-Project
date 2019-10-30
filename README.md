@@ -25,6 +25,7 @@ Beside that, there are some levels to finish this problem:
 ![level 1](./image/level1.png)
 ### Level 2 : Applying three algorithm : A * search, Breath-First search and Depth-First search
 #### A* search 
+
 ![level 2 a* search](./image/level2Asearch.png)
 #### BFS 
 ![level 2 bfs](./image/level2bfs.png)
