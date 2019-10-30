@@ -22,7 +22,7 @@ Beside that, there are some levels to finish this problem:
 ### DFS 
 ## Demo
 ### Level 1 : A * search 
-![level 1](./image/level-1.PNG)
+![level 1](./image/level 1.png)
 
 ## Assignment: https://docs.google.com/document/d/1JTLTkssX6G6HsH4HEDVw75ihP5P4a6jsaDm4urtqYro/edit
 ## Main Docs: https://docs.google.com/spreadsheets/d/1IrroFEv30Hc_tlQWwlEUv6piI6VWk1d3FAFVNH2tXqM/edit?usp=sharing
