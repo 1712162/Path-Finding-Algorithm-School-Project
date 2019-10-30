@@ -1,8 +1,8 @@
-# Applying searching algorithm in Python
-School project on implementing searching algorithm in Python3 and Pygame 
+# Applying path finding algorithm in Python
+School project on implementing path finding algorithm in Python3 and Pygame 
 ## Table of contents:
 * [Problem](#problem)
-* [Searching algorithm](#searching-algorithm)
+* [Path finding algorithm](#Pathfinding-algorithm)
 * [Demo](#demo)
 * [Setup](#setup)
 ## Problem 
@@ -12,11 +12,11 @@ Note that : polygons should not overlay with each other.
 ![Problem image](./image/problem.PNG)
 
 Beside that, there are some levels to finish this problem: 
-* Level 1: Implementing only one searching algorithm
-* Level 2: Implementing three searching algorithm and comparing their performances
+* Level 1: Implementing only one path finding algorithm
+* Level 2: Implementing three pathfinding algorithm and comparing their performances
 * Level 3: Along the road, you also have to visit some points before you reach the goal.Implementing one algorithm in this situation.
 * Level 4: Implementing one algorithm in the situation where polygons can move around the map.
-## Searching algorithm 
+## Path finding algorithm 
 ### A* search 
 ### BFS 
 ### DFS 
@@ -36,5 +36,3 @@ Beside that, there are some levels to finish this problem:
 ### Level 4: Moving polygons 
 [![Watch the video](https://img.youtube.com/vi/48cSOiGZuwo/maxresdefault.jpg)](https://youtu.be/48cSOiGZuwo)
 
-## Assignment: https://docs.google.com/document/d/1JTLTkssX6G6HsH4HEDVw75ihP5P4a6jsaDm4urtqYro/edit
-## Main Docs: https://docs.google.com/spreadsheets/d/1IrroFEv30Hc_tlQWwlEUv6piI6VWk1d3FAFVNH2tXqM/edit?usp=sharing
