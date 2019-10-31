@@ -1,6 +1,6 @@
 # Applying path finding algorithm in Python
 School project on implementing path finding algorithm in Python3 and Pygame 
-## Table of contents:
+## Table of contents
 * [Problem](#problem)
 * [Path finding algorithm](#path-finding-algorithm)
 * [Demo](#demo)
@@ -19,8 +19,20 @@ Beside that, there are some levels to finish this problem:
 * Level 4: Implementing one algorithm in the situation where polygons can move around the map.
 ## Path finding algorithm 
 ### A* search 
+Find the lowest value of f = g + h (g: the length from start to current cell, h: Estimated length from current to final cell) 
+
+Use Manhattan heuristics to estimated the length
+
+Futher reading: https://www.geeksforgeeks.org/a-search-algorithm/
 ### BFS 
+Guarantee to find the shortest path 
+
+Futher reading: https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/
+
 ### DFS 
+Not guarantee to find the best solution. Just found one way to get there.
+
+Futher reading: https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
 ## Demo
 ### Level 1 : A * search 
 ![level 1](./image/level1.png)
